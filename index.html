@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建筑计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f2f6;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            background: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .input-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group label {
+            width: 120px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn-calculate {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-calculate:hover {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+        
+        .results-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            background: #f8f9fa;
+        }
+        
+        .summary {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f5f7fa;
+        }
+        
+        .visualization {
+            text-align: center;
+            font-family: monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .visualization-line {
+            margin: 8px 0;
+            white-space: nowrap;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #eaeaea;
+            background: #f8f9fa;
+        }
+        
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .input-group label {
+                margin-bottom: 8px;
+                width: 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>建筑计算器</h1>
+            <p>多种建筑计算工具，方便您的设计和施工</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(0)">圆计算</div>
+            <div class="tab" onclick="switchTab(1)">待更新</div>
+            <div class="tab" onclick="switchTab(2)">待更新</div>
+            <div class="tab" onclick="switchTab(3)">待更新</div>
+        </div>
+        
+        <div class="tab-content active" id="circle-tab">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="diameter">圆的直径 (mm):</label>
+                    <input type="number" id="diameter" placeholder="请输入直径" value="860.00" step="10" min="0">
+                </div>
+                
+                <div class="input-group">
+                    <label for="spacing">间距 (mm):</label>
+                    <input type="number" id="spacing" placeholder="请输入间距" value="100.00" step="10" min="0">
+                </div>
+                
+                <button class="btn-calculate" onclick="calculateCircle()">计算</button>
+            </div>
+            
+            <div class="results-container" id="circle-results">
+                <!-- 结果将在这里动态生成 -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="area-tab">
+            <div class="coming-soon">
+                <h2>待更新</h2>
+                <p>此功能正在开发中，敬请期待...</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="volume-tab">
+            <div class="coming-soon">
+                <h2>待更新</h2>
+                <p>此功能正在开发中，敬请期待...</p>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="material-tab">
+            <div class="coming-soon">
+                <h2>待更新</h2>
+                <p>此功能正在开发中，敬请期待...</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025-2026 建筑计算器 | 多功能建筑计算工具</p>
+        </footer>
+    </div>
+
+    <script>
+        // 切换标签页函数
+        function switchTab(tabIndex) {
+            // 隐藏所有标签内容
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // 取消所有标签的激活状态
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // 激活选中的标签和内容
+            tabs[tabIndex].classList.add('active');
+            
+            if (tabIndex === 0) {
+                document.getElementById('circle-tab').classList.add('active');
+            } else if (tabIndex === 1) {
+                document.getElementById('area-tab').classList.add('active');
+            } else if (tabIndex === 2) {
+                document.getElementById('volume-tab').classList.add('active');
+            } else if (tabIndex === 3) {
+                document.getElementById('material-tab').classList.add('active');
+            }
+        }
+        
+        // 圆计算函数
+        function calculateCircle() {
+            const diameter = parseFloat(document.getElementById('diameter').value);
+            const spacing = parseFloat(document.getElementById('spacing').value);
+            
+            if (isNaN(diameter) || isNaN(spacing) || diameter <= 0 || spacing <= 0) {
+                alert('请输入有效的直径和间距值！');
+                return;
+            }
+            
+            // 计算弦长
+            const results = calculateChordLengths(diameter, spacing);
+            
+            // 生成可视化结果
+            const visualization = visualizeChordLengths(results, diameter);
+            
+            // 显示结果
+            displayResults(results, visualization, diameter, spacing);
+        }
+        
+        // 计算弦长函数
+        function calculateChordLengths(diameter, spacing) {
+            if (diameter <= 0 || spacing <= 0) {
+                return [];
+            }
+            
+            const radius = diameter / 2;
+            const results = [];
+            
+            // 计算最大距离（不超过半径）
+            const maxDistance = Math.floor(radius / spacing) * spacing;
+            
+            // 生成距离列表（从一侧到另一侧）
+            const negativeDistances = [];
+            for (let i = Math.floor(maxDistance/spacing); i > 0; i--) {
+                negativeDistances.push(-i * spacing);
+            }
+            
+            const positiveDistances = [];
+            for (let i = 0; i <= Math.floor(maxDistance/spacing); i++) {
+                positiveDistances.push(i * spacing);
+            }
+            
+            // 合并距离列表
+            const distances = negativeDistances.concat(positiveDistances);
+            
+            // 计算每个距离处的弦长
+            const chordLengths = [];
+            for (const distance of distances) {
+                if (Math.abs(distance) < radius) {
+                    const halfChord = Math.sqrt(radius**2 - distance**2);
+                    const chordLength = 2 * halfChord;
+                    chordLengths.push(chordLength);
+                } else {
+                    // 距离等于半径时，弦长为0
+                    chordLengths.push(0.0);
+                }
+            }
+            
+            // 计算与直径的差值
+            const diameterDifferences = [];
+            for (const chordLength of chordLengths) {
+                const diff = Math.abs(chordLength - diameter);
+                diameterDifferences.push(diff);
+            }
+            
+            // 组合结果，使用绝对距离
+            for (let i = 0; i < distances.length; i++) {
+                results.push({
+                    segment: i + 1,  // 段号从1开始
+                    spacing: Math.abs(distances[i]),  // 使用绝对距离
+                    chordLength: chordLengths[i],
+                    diameterDifference: diameterDifferences[i]
+                });
+            }
+            
+            return results;
+        }
+        
+        // 可视化弦长函数
+        function visualizeChordLengths(results, diameter) {
+            const visualizationLines = [];
+            
+            // 找到中心段（弦长最接近直径的段）
+            let centerSegment = null;
+            let minDiff = Number.MAX_VALUE;
+            
+            for (const result of results) {
+                if (Math.abs(result.chordLength - diameter) < minDiff) {
+                    minDiff = Math.abs(result.chordLength - diameter);
+                    centerSegment = result.segment;
+                }
+            }
+            
+            // 计算最大弦长用于缩放
+            let maxChord = 0;
+            for (const result of results) {
+                if (result.chordLength > maxChord) {
+                    maxChord = result.chordLength;
+                }
+            }
+            
+            const scale = 20 / maxChord;  // 将最大弦长缩放到20个字符宽度
+            
+            // 预计算所有行的最大长度
+            let maxVisualLength = 0;
+            const visualizations = [];
+            
+            for (const result of results) {
+                // 计算等号数量
+                const numEquals = Math.floor(result.chordLength * scale);
+                
+                // 创建等号字符串
+                const equalsStr = "=".repeat(numEquals);
+                
+                // 创建信息字符串
+                const chordStr = `${result.chordLength.toFixed(3)}mm`;
+                
+                // 构建可视化字符串
+                let visualization = `${equalsStr}(${chordStr})${equalsStr}`;
+                
+                visualizations.push(visualization);
+                maxVisualLength = Math.max(maxVisualLength, visualization.length);
+            }
+            
+            // 生成图形化表示
+            for (let visualization of visualizations) {
+                // 居中显示
+                const padding = Math.floor((maxVisualLength - visualization.length) / 2);
+                if (padding > 0) {
+                    visualization = " ".repeat(padding) + visualization;
+                }
+                
+                visualizationLines.push(visualization);
+            }
+            
+            return visualizationLines;
+        }
+        
+        // 显示结果函数
+        function displayResults(results, visualization, diameter, spacing) {
+            const resultsContainer = document.getElementById('circle-results');
+            
+            // 创建摘要HTML
+            let html = `
+                <div class="summary">
+                    总段数: ${results.length}<br>
+                    直径: ${diameter.toFixed(3)}mm<br>
+                    间距: ${spacing.toFixed(3)}mm
+                </div>
+            `;
+            
+            // 创建数据表格HTML
+            html += `
+                <h3>详细数据</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>段号</th>
+                            <th>间距 (mm)</th>
+                            <th>弦长 (mm)</th>
+                            <th>与直径差值 (mm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            for (const result of results) {
+                html += `
+                    <tr>
+                        <td>${result.segment}</td>
+                        <td>${result.spacing.toFixed(3)}</td>
+                        <td>${result.chordLength.toFixed(3)}</td>
+                        <td>${result.diameterDifference.toFixed(3)}</td>
+                    </tr>
+                `;
+            }
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            // 创建可视化HTML
+            html += `
+                <h3>图形化表示</h3>
+                <div class="visualization">
+            `;
+            
+            for (const line of visualization) {
+                html += `<div class="visualization-line">${line}</div>`;
+            }
+            
+            html += `</div>`;
+            
+            // 更新结果容器
+            resultsContainer.innerHTML = html;
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 默认计算一次圆
+            calculateCircle();
+        });
+    </script>
+</body>
+</html>
