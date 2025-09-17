@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建筑计算器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            padding: 20px;
+            padding: 10px;
+            font-size: 16px;
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 100%;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
@@ -31,28 +34,47 @@
         header {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
+            position: relative;
         }
         
         h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+        
+        .menu-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            display: none;
         }
         
         .tabs {
             display: flex;
             background: #f1f2f6;
             border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
         
         .tab {
-            padding: 15px 25px;
+            padding: 12px 20px;
             cursor: pointer;
             font-weight: bold;
             color: #7f8c8d;
             transition: all 0.3s;
             border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .tab.active {
@@ -63,7 +85,7 @@
         
         .tab-content {
             display: none;
-            padding: 25px;
+            padding: 20px 15px;
         }
         
         .tab-content.active {
@@ -71,23 +93,23 @@
         }
         
         .input-section {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
         }
         
         .input-group label {
-            width: 120px;
             font-weight: bold;
             color: #2c3e50;
+            margin-bottom: 8px;
         }
         
         .input-group input {
-            flex: 1;
+            width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
@@ -109,10 +131,11 @@
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            margin-top: 10px;
         }
         
         .btn-calculate:hover {
@@ -123,28 +146,29 @@
         
         .coming-soon {
             text-align: center;
-            padding: 40px;
+            padding: 30px 20px;
             color: #7f8c8d;
-            font-size: 18px;
+            font-size: 16px;
         }
         
         .results-container {
-            max-height: 500px;
+            max-height: 60vh;
             overflow-y: auto;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
             background: #f8f9fa;
+            -webkit-overflow-scrolling: touch;
         }
         
         .summary {
             background: #e8f4fc;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #2980b9;
         }
@@ -152,11 +176,13 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            min-width: 300px;
         }
         
         .data-table th, .data-table td {
-            padding: 12px 15px;
+            padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
         }
@@ -171,48 +197,151 @@
             background-color: #f5f7fa;
         }
         
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
+        }
+        
         .visualization {
             text-align: center;
             font-family: monospace;
-            font-size: 16px;
-            line-height: 1.8;
+            font-size: 14px;
+            line-height: 1.6;
             background: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .visualization-line {
-            margin: 8px 0;
+            margin: 6px 0;
             white-space: nowrap;
         }
         
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             color: #7f8c8d;
             font-size: 14px;
             border-top: 1px solid #eaeaea;
             background: #f8f9fa;
         }
         
-        @media (max-width: 768px) {
-            .input-group {
-                flex-direction: column;
-                align-items: flex-start;
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+                font-size: 14px;
             }
             
-            .input-group label {
-                margin-bottom: 8px;
-                width: 100%;
+            header {
+                padding: 12px;
             }
             
-            .tabs {
-                flex-direction: column;
+            h1 {
+                font-size: 20px;
             }
             
             .tab {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .tab-content {
+                padding: 15px 10px;
+            }
+            
+            .input-group input {
+                padding: 10px;
+                font-size: 16px; /* 保持较大的字体以便于触摸 */
+            }
+            
+            .btn-calculate {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .data-table {
+                font-size: 12px;
+            }
+            
+            .data-table th, .data-table td {
+                padding: 8px 5px;
+            }
+            
+            .visualization {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 700px;
+            }
+            
+            .input-group {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .input-group label {
+                width: 120px;
+                margin-bottom: 0;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .container {
+                max-width: 900px;
+            }
+        }
+        
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 移动端优化 */
+        .mobile-tabs {
+            display: none;
+        }
+        
+        @media (max-width: 480px) {
+            .tabs {
+                display: none;
+            }
+            
+            .mobile-tabs {
+                display: flex;
+                justify-content: space-around;
+                background: #f1f2f6;
+                padding: 10px 0;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .mobile-tab {
                 text-align: center;
+                padding: 10px;
+                font-weight: bold;
+                color: #7f8c8d;
+                flex: 1;
+            }
+            
+            .mobile-tab.active {
+                color: #3498db;
+                border-bottom: 3px solid #3498db;
+            }
+            
+            .menu-toggle {
+                display: block;
             }
         }
     </style>
@@ -222,6 +351,9 @@
         <header>
             <h1>建筑计算器</h1>
             <p>多种建筑计算工具，方便您的设计和施工</p>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
         </header>
         
         <div class="tabs">
@@ -231,16 +363,23 @@
             <div class="tab" onclick="switchTab(3)">待更新</div>
         </div>
         
+        <div class="mobile-tabs">
+            <div class="mobile-tab active" onclick="switchTab(0)">圆</div>
+            <div class="mobile-tab" onclick="switchTab(1)">待更新</div>
+            <div class="mobile-tab" onclick="switchTab(2)">待更新</div>
+            <div class="mobile-tab" onclick="switchTab(3)">待更新</div>
+        </div>
+        
         <div class="tab-content active" id="circle-tab">
             <div class="input-section">
                 <div class="input-group">
                     <label for="diameter">圆的直径 (mm):</label>
-                    <input type="number" id="diameter" placeholder="请输入直径" value="860.00" step="10" min="0">
+                    <input type="number" id="diameter" placeholder="请输入直径" value="860.00" step="0.01" min="0">
                 </div>
                 
                 <div class="input-group">
                     <label for="spacing">间距 (mm):</label>
-                    <input type="number" id="spacing" placeholder="请输入间距" value="100.00" step="10" min="0">
+                    <input type="number" id="spacing" placeholder="请输入间距" value="100.00" step="0.01" min="0">
                 </div>
                 
                 <button class="btn-calculate" onclick="calculateCircle()">计算</button>
@@ -288,8 +427,12 @@
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
+            const mobileTabs = document.querySelectorAll('.mobile-tab');
+            mobileTabs.forEach(tab => tab.classList.remove('active'));
+            
             // 激活选中的标签和内容
             tabs[tabIndex].classList.add('active');
+            mobileTabs[tabIndex].classList.add('active');
             
             if (tabIndex === 0) {
                 document.getElementById('circle-tab').classList.add('active');
@@ -404,7 +547,9 @@
                 }
             }
             
-            const scale = 20 / maxChord;  // 将最大弦长缩放到20个字符宽度
+            // 根据屏幕宽度调整缩放比例
+            const screenWidth = window.innerWidth;
+            const scale = screenWidth < 480 ? 8 / maxChord : 12 / maxChord;
             
             // 预计算所有行的最大长度
             let maxVisualLength = 0;
@@ -447,7 +592,7 @@
             
             // 创建摘要HTML
             let html = `
-                <div class="summary">
+                <div class="summary fade-in">
                     总段数: ${results.length}<br>
                     直径: ${diameter.toFixed(3)}mm<br>
                     间距: ${spacing.toFixed(3)}mm
@@ -457,16 +602,17 @@
             // 创建数据表格HTML
             html += `
                 <h3>详细数据</h3>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>段号</th>
-                            <th>间距 (mm)</th>
-                            <th>弦长 (mm)</th>
-                            <th>与直径差值 (mm)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>段号</th>
+                                <th>间距 (mm)</th>
+                                <th>弦长 (mm)</th>
+                                <th>与直径差值 (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
             
             for (const result of results) {
@@ -481,14 +627,15 @@
             }
             
             html += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             `;
             
             // 创建可视化HTML
             html += `
                 <h3>图形化表示</h3>
-                <div class="visualization">
+                <div class="visualization fade-in">
             `;
             
             for (const line of visualization) {
@@ -499,12 +646,32 @@
             
             // 更新结果容器
             resultsContainer.innerHTML = html;
+            
+            // 滚动到结果区域
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             // 默认计算一次圆
             calculateCircle();
+            
+            // 添加触摸事件支持
+            document.querySelectorAll('.tab, .mobile-tab, .btn-calculate').forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.7';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                });
+            });
+            
+            // 菜单切换功能
+            document.querySelector('.menu-toggle').addEventListener('click', function() {
+                const tabs = document.querySelector('.tabs');
+                tabs.style.display = tabs.style.display === 'none' ? 'flex' : 'none';
+            });
         });
     </script>
 </body>
