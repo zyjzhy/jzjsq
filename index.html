@@ -92,20 +92,39 @@
             display: block;
         }
         
+        /* 圆计算页面输入区域布局优化 */
+        .circle-input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .circle-input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 480px) {
+            .circle-input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
         .input-section {
             margin-bottom: 15px;
         }
         
         .input-group {
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
         }
         
         .input-group label {
             font-weight: bold;
             color: #2c3e50;
-            margin-bottom: 8px;
+            /* margin-bottom: 8px; */
+            display: block;
+            font-size: 13px;
         }
         
         .input-group input {
@@ -152,7 +171,6 @@
         }
         
         .results-container {
-            max-height: 60vh;
             overflow-y: auto;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -185,6 +203,7 @@
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
+            font-weight: bold;
         }
         
         .data-table th {
@@ -229,6 +248,164 @@
             background: #f8f9fa;
         }
         
+        /* 六边形计算器特定样式 */
+        .hexagon-container {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 15px;
+            align-items: start;
+        }
+        
+        @media (max-width: 768px) {
+            .hexagon-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .hexagon-input-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+        
+        .hexagon-results-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+        
+        .hexagon-input-grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        /* 响应式输入参数布局 */
+        @media (min-width: 769px) {
+            .hexagon-input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) and (min-width: 601px) {
+            .hexagon-input-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) and (min-width: 481px) {
+            .hexagon-input-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hexagon-input-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .hexagon-result-section {
+            margin-bottom: 15px;
+        }
+        
+        .hexagon-result-section h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #555;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .inline-result {
+            display: inline-block;
+            margin-right: 5px;
+            margin-bottom: 8px;
+            padding: 6px 5px;
+            background-color: #f1f8ff;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .inline-label {
+            font-weight: 600;
+            color: #666;
+            margin-right: 5px;
+        }
+        
+        .inline-value {
+            font-weight: 600;
+            color: #3498db;
+        }
+        
+        .toggle-btn {
+            background-color: #f8f9fa;
+            color: #3498db;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+        
+        .toggle-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .toggle-btn::after {
+            content: '▶';
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-btn.expanded::after {
+            transform: rotate(90deg);
+        }
+        
+        .collapsible {
+            display: none;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .expandable-section {
+            margin-bottom: 15px;
+        }
+        
+        .reference-image {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            margin-bottom: 15px;
+        }
+        
+        .reference-image img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 5px;
+        }
+        
+        .hexagon-input-title {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            color: #3498db;
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 8px;
+        }
+        
         /* 响应式设计 */
         @media (max-width: 480px) {
             body {
@@ -255,7 +432,7 @@
             
             .input-group input {
                 padding: 10px;
-                font-size: 16px; /* 保持较大的字体以便于触摸 */
+                font-size: 14px;
             }
             
             .btn-calculate {
@@ -280,16 +457,6 @@
         @media (min-width: 768px) {
             .container {
                 max-width: 700px;
-            }
-            
-            .input-group {
-                flex-direction: row;
-                align-items: center;
-            }
-            
-            .input-group label {
-                width: 120px;
-                margin-bottom: 0;
             }
         }
         
@@ -358,28 +525,31 @@
         
         <div class="tabs">
             <div class="tab active" onclick="switchTab(0)">圆计算</div>
-            <div class="tab" onclick="switchTab(1)">待更新</div>
+            <div class="tab" onclick="switchTab(1)">六边形几何</div>
             <div class="tab" onclick="switchTab(2)">待更新</div>
             <div class="tab" onclick="switchTab(3)">待更新</div>
         </div>
         
         <div class="mobile-tabs">
             <div class="mobile-tab active" onclick="switchTab(0)">圆</div>
-            <div class="mobile-tab" onclick="switchTab(1)">待更新</div>
+            <div class="mobile-tab" onclick="switchTab(1)">六边形</div>
             <div class="mobile-tab" onclick="switchTab(2)">待更新</div>
             <div class="mobile-tab" onclick="switchTab(3)">待更新</div>
         </div>
         
+        <!-- 圆计算标签页 -->
         <div class="tab-content active" id="circle-tab">
             <div class="input-section">
-                <div class="input-group">
-                    <label for="diameter">圆的直径 (mm):</label>
-                    <input type="number" id="diameter" placeholder="请输入直径" value="860.00" step="0.01" min="0">
-                </div>
-                
-                <div class="input-group">
-                    <label for="spacing">间距 (mm):</label>
-                    <input type="number" id="spacing" placeholder="请输入间距" value="100.00" step="0.01" min="0">
+                <div class="circle-input-row">
+                    <div class="input-group circle-input-group">
+                        <label for="diameter">圆的直径 (mm):</label>
+                        <input type="number" id="diameter" placeholder="请输入直径" value="860.00" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="input-group circle-input-group">
+                        <label for="spacing">间距 (mm):</label>
+                        <input type="number" id="spacing" placeholder="请输入间距" value="100.00" step="0.01" min="0">
+                    </div>
                 </div>
                 
                 <button class="btn-calculate" onclick="calculateCircle()">计算</button>
@@ -387,6 +557,120 @@
             
             <div class="results-container" id="circle-results">
                 <!-- 结果将在这里动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 六边形几何标签页 -->
+        <div class="tab-content" id="hexagon-tab">
+            <div class="hexagon-container">
+                <div class="hexagon-input-section">
+                    <div class="expandable-section">
+                        <button class="toggle-btn">参考图</button>
+                        <div class="reference-image collapsible">
+                            <h3>参考图</h3>
+                            <img src="https://youke1.picui.cn/s1/2025/11/07/690dc727b1193.png" alt="参考示意图">
+                        </div>
+                    </div>
+                    
+                    <h2 class="hexagon-input-title">输入参数(单位:mm)</h2>
+                    
+                    <div class="hexagon-input-grid">
+                        <div class="input-group">
+                            <label for="ab_h">AB横向垂直距离</label>
+                            <input type="number" id="ab_h" value="595" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="ab_v">AB纵向垂直距离</label>
+                            <input type="number" id="ab_v" value="355" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="bc_h">BC横向垂直距离</label>
+                            <input type="number" id="bc_h" value="2555" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="cd_u">CD上半纵向距离</label>
+                            <input type="number" id="cd_u" value="350" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="cd_l">CD下半纵向距离</label>
+                            <input type="number" id="cd_l" value="350" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="de_h">DE横向垂直距离</label>
+                            <input type="number" id="de_h" value="2555" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="ef_h">EF横向垂直距离</label>
+                            <input type="number" id="ef_h" value="595" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="ef_v">EF纵向垂直距离</label>
+                            <input type="number" id="ef_v" value="355" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="fa_u">FA上半纵向距离</label>
+                            <input type="number" id="fa_u" value="1395" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="fa_l">FA下半纵向距离</label>
+                            <input type="number" id="fa_l" value="1395" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="be_u">BE上半纵向距离</label>
+                            <input type="number" id="be_u" value="1750" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="be_l">BE下半纵向距离</label>
+                            <input type="number" id="be_l" value="1750" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="cover_layer">保护层厚度</label>
+                            <input type="number" id="cover_layer" value="50" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="spacing_hex">线段间距</label>
+                            <input type="number" id="spacing_hex" value="100" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="segment_count">线段数量</label>
+                            <input type="number" id="segment_count" value="10" min="1">
+                        </div>
+                    </div>
+                    
+                    <button class="btn-calculate" id="calculate-hexagon-btn">计算</button>
+                    <div id="hexagon-error" class="error"></div>
+                </div>
+                
+                <div class="hexagon-results-section">
+                    <h2>计算结果</h2>
+                    
+                    <div class="results-container" id="hexagon-results">
+                        <div class="expandable-section">
+                            <button class="toggle-btn">六边形边长</button>
+                            <div id="hexagon-edge-lengths" class="collapsible"></div>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <button class="toggle-btn">对角线长度</button>
+                            <div id="hexagon-diagonals" class="collapsible"></div>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <button class="toggle-btn">垂直距离</button>
+                            <div id="hexagon-distances" class="collapsible"></div>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <button class="toggle-btn">角度信息</button>
+                            <div id="hexagon-angles" class="collapsible"></div>
+                        </div>
+                        
+                        <div class="hexagon-result-section">
+                            <h3>线段长度汇总表</h3>
+                            <div id="hexagon-segments-table"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -398,13 +682,6 @@
         </div>
         
         <div class="tab-content" id="volume-tab">
-            <div class="coming-soon">
-                <h2>待更新</h2>
-                <p>此功能正在开发中，敬请期待...</p>
-            </div>
-        </div>
-        
-        <div class="tab-content" id="material-tab">
             <div class="coming-soon">
                 <h2>待更新</h2>
                 <p>此功能正在开发中，敬请期待...</p>
@@ -437,11 +714,16 @@
             if (tabIndex === 0) {
                 document.getElementById('circle-tab').classList.add('active');
             } else if (tabIndex === 1) {
-                document.getElementById('area-tab').classList.add('active');
+                document.getElementById('hexagon-tab').classList.add('active');
+                // 切换到六边形标签页时自动计算一次
+                if (!window.hexagonCalculated) {
+                    calculateHexagon();
+                    window.hexagonCalculated = true;
+                }
             } else if (tabIndex === 2) {
-                document.getElementById('volume-tab').classList.add('active');
+                document.getElementById('area-tab').classList.add('active');
             } else if (tabIndex === 3) {
-                document.getElementById('material-tab').classList.add('active');
+                document.getElementById('volume-tab').classList.add('active');
             }
         }
         
@@ -462,7 +744,7 @@
             const visualization = visualizeChordLengths(results, diameter);
             
             // 显示结果
-            displayResults(results, visualization, diameter, spacing);
+            displayCircleResults(results, visualization, diameter, spacing);
         }
         
         // 计算弦长函数
@@ -586,8 +868,8 @@
             return visualizationLines;
         }
         
-        // 显示结果函数
-        function displayResults(results, visualization, diameter, spacing) {
+        // 显示圆计算结果函数
+        function displayCircleResults(results, visualization, diameter, spacing) {
             const resultsContainer = document.getElementById('circle-results');
             
             // 创建摘要HTML
@@ -648,13 +930,299 @@
             resultsContainer.innerHTML = html;
             
             // 滚动到结果区域
-            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            // resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // 六边形几何计算函数
+        function calculateHexagon() {
+            // 获取输入值
+            const ab_h = parseFloat(document.getElementById('ab_h').value);
+            const ab_v = parseFloat(document.getElementById('ab_v').value);
+            const bc_h = parseFloat(document.getElementById('bc_h').value);
+            const cd_u = parseFloat(document.getElementById('cd_u').value);
+            const cd_l = parseFloat(document.getElementById('cd_l').value);
+            const de_h = parseFloat(document.getElementById('de_h').value);
+            const ef_h = parseFloat(document.getElementById('ef_h').value);
+            const ef_v = parseFloat(document.getElementById('ef_v').value);
+            const fa_u = parseFloat(document.getElementById('fa_u').value);
+            const fa_l = parseFloat(document.getElementById('fa_l').value);
+            const be_u = parseFloat(document.getElementById('be_u').value);
+            const be_l = parseFloat(document.getElementById('be_l').value);
+            const cover_layer = parseFloat(document.getElementById('cover_layer').value);
+            const spacing_hex = parseFloat(document.getElementById('spacing_hex').value);
+            const segment_count = parseInt(document.getElementById('segment_count').value);
+            
+            // 验证输入
+            const params = [ab_h, ab_v, bc_h, cd_u, cd_l, de_h, ef_h, ef_v, fa_u, fa_l, be_u, be_l, cover_layer, spacing_hex];
+            if (params.some(p => p <= 0) || segment_count <= 0) {
+                document.getElementById('hexagon-error').textContent = "错误：所有参数必须为正数";
+                return;
+            }
+            
+            document.getElementById('hexagon-error').textContent = "";
+            
+            // 基础参数推导
+            const bc_v = be_u - cd_u;
+            const de_v = be_l - cd_l;
+            const cd_len = cd_u + cd_l;
+            const fa_len = fa_u + fa_l;
+            const be_len = be_u + be_l;
+            
+            // 验证BC、DE纵向距离为正
+            if (bc_v <= 0 || de_v <= 0) {
+                document.getElementById('hexagon-error').textContent = "错误：BC纵向距离或DE纵向距离必须为正数";
+                return;
+            }
+            
+            // 各边实际长度
+            const ab_len = Math.hypot(ab_h, ab_v);
+            const bc_len = Math.hypot(bc_h, bc_v);
+            const de_len = Math.hypot(de_h, de_v);
+            const ef_len = Math.hypot(ef_h, ef_v);
+            
+            // 顶点坐标计算
+            const A = { x: 0, y: 0 };
+            const B = { x: ab_h, y: ab_v };
+            const C = { x: B.x + bc_h, y: B.y - bc_v };
+            const D = { x: C.x, y: C.y - cd_len };
+            const E = { x: D.x - de_h, y: D.y - de_v };
+            const F = { x: E.x - ef_h, y: E.y + ef_v };
+            
+            // 对角线长度计算
+            const ad_len = Math.hypot(D.x - A.x, D.y - A.y);
+            const cf_len = Math.hypot(F.x - C.x, F.y - C.y);
+            const be_len_diagonal = Math.hypot(E.x - B.x, E.y - B.y);
+            
+            // 线段中点计算
+            const bc_mid = { x: (B.x + C.x) / 2, y: (B.y + C.y) / 2 };
+            const ad_mid = { x: (A.x + D.x) / 2, y: (A.y + D.y) / 2 };
+            const de_mid = { x: (D.x + E.x) / 2, y: (D.y + E.y) / 2 };
+            const cf_mid = { x: (C.x + F.x) / 2, y: (C.y + F.y) / 2 };
+            const af_mid = { x: (A.x + F.x) / 2, y: (A.y + F.y) / 2 };
+            const be_mid = { x: (B.x + E.x) / 2, y: (B.y + E.y) / 2 };
+            
+            // 垂直距离计算
+            const bc_ad_dist = Math.hypot(ad_mid.x - bc_mid.x, ad_mid.y - bc_mid.y);
+            const de_cf_dist = Math.hypot(cf_mid.x - de_mid.x, cf_mid.y - de_mid.y);
+            const af_be_dist = Math.hypot(be_mid.x - af_mid.x, be_mid.y - af_mid.y);
+            
+            // 角度计算
+            const angle_BAD = Math.asin(Math.min(1.0, bc_ad_dist / ab_len));
+            const ef_ad_dist = Math.hypot(ad_mid.x - (E.x + F.x) / 2, ad_mid.y - (E.y + F.y) / 2);
+            const angle_FAD = Math.asin(Math.min(1.0, ef_ad_dist / fa_len));
+            const angle_EFC = Math.asin(Math.min(1.0, de_cf_dist / ef_len));
+            const ab_cf_dist = Math.hypot(cf_mid.x - (A.x + B.x) / 2, cf_mid.y - (A.y + B.y) / 2);
+            const angle_AFC = Math.asin(Math.min(1.0, ab_cf_dist / fa_len));
+            const angle_ABE = Math.asin(Math.min(1.0, af_be_dist / ab_len));
+            const cd_be_dist = Math.hypot(be_mid.x - (C.x + D.x) / 2, be_mid.y - (C.y + D.y) / 2);
+            const angle_CBE = Math.asin(Math.min(1.0, cd_be_dist / bc_len));
+            
+            // 计算各边线段长度
+            const bc_segments = [];
+            const de_segments = [];
+            const af_segments = [];
+            
+            for (let i = 0; i < segment_count; i++) {
+                const distance_from_edge = i === 0 ? cover_layer : cover_layer + i * spacing_hex;
+                
+                // BC边
+                let bc_segment_length;
+                if (distance_from_edge <= bc_ad_dist) {
+                    const opposite = distance_from_edge;
+                    const adjacent = opposite / Math.tan(angle_BAD);
+                    bc_segment_length = adjacent * 2 + bc_len;
+                } else {
+                    const excess = distance_from_edge - bc_ad_dist;
+                    const adjacent = excess / Math.tan(angle_FAD);
+                    bc_segment_length = ad_len - adjacent * 2;
+                }
+                bc_segments.push({ distance: distance_from_edge, length: bc_segment_length });
+                
+                // DE边
+                let de_segment_length;
+                if (distance_from_edge <= de_cf_dist) {
+                    const opposite = distance_from_edge;
+                    const adjacent = opposite / Math.tan(angle_EFC);
+                    de_segment_length = adjacent * 2 + de_len;
+                } else {
+                    const excess = distance_from_edge - de_cf_dist;
+                    const adjacent = excess / Math.tan(angle_AFC);
+                    de_segment_length = cf_len - adjacent * 2;
+                }
+                de_segments.push({ distance: distance_from_edge, length: de_segment_length });
+                
+                // AF边
+                let af_segment_length;
+                if (distance_from_edge <= af_be_dist) {
+                    const opposite = distance_from_edge;
+                    const adjacent = opposite / Math.tan(angle_ABE);
+                    af_segment_length = adjacent * 2 + fa_len;
+                } else {
+                    const excess = distance_from_edge - af_be_dist;
+                    const adjacent = excess / Math.tan(angle_CBE);
+                    af_segment_length = be_len_diagonal - adjacent * 2;
+                }
+                af_segments.push({ distance: distance_from_edge, length: af_segment_length });
+            }
+            
+            // 更新UI显示结果
+            updateHexagonResults({
+                edgeLengths: {
+                    'AB': ab_len,
+                    'BC': bc_len,
+                    'CD': cd_len,
+                    'DE': de_len,
+                    'EF': ef_len,
+                    'FA': fa_len
+                },
+                diagonals: {
+                    'AD': ad_len,
+                    'CF': cf_len,
+                    'BE': be_len_diagonal
+                },
+                distances: {
+                    'BC到AD': bc_ad_dist,
+                    'DE到CF': de_cf_dist,
+                    'AF到BE': af_be_dist
+                },
+                angles: {
+                    '∠BAD': angle_BAD * 180 / Math.PI,
+                    '∠FAD': angle_FAD * 180 / Math.PI,
+                    '∠EFC': angle_EFC * 180 / Math.PI,
+                    '∠AFC': angle_AFC * 180 / Math.PI,
+                    '∠ABE': angle_ABE * 180 / Math.PI,
+                    '∠CBE': angle_CBE * 180 / Math.PI
+                },
+                segments: {
+                    BC: bc_segments,
+                    DE: de_segments,
+                    AF: af_segments
+                }
+            });
+        }
+        
+        // 更新六边形结果显示
+        function updateHexagonResults(results) {
+            // 更新边长
+            const edgeLengthsContainer = document.getElementById('hexagon-edge-lengths');
+            edgeLengthsContainer.innerHTML = '';
+            for (const [key, value] of Object.entries(results.edgeLengths)) {
+                edgeLengthsContainer.innerHTML += `
+                    <div class="inline-result">
+                        <span class="inline-label">${key}：</span>
+                        <span class="inline-value">${value.toFixed(3)} mm</span>
+                    </div>
+                `;
+            }
+            
+            // 更新对角线
+            const diagonalsContainer = document.getElementById('hexagon-diagonals');
+            diagonalsContainer.innerHTML = '';
+            for (const [key, value] of Object.entries(results.diagonals)) {
+                diagonalsContainer.innerHTML += `
+                    <div class="inline-result">
+                        <span class="inline-label">${key}：</span>
+                        <span class="inline-value">${value.toFixed(3)} mm</span>
+                    </div>
+                `;
+            }
+            
+            // 更新垂直距离
+            const distancesContainer = document.getElementById('hexagon-distances');
+            distancesContainer.innerHTML = '';
+            for (const [key, value] of Object.entries(results.distances)) {
+                distancesContainer.innerHTML += `
+                    <div class="inline-result">
+                        <span class="inline-label">${key}：</span>
+                        <span class="inline-value">${value.toFixed(3)} mm</span>
+                    </div>
+                `;
+            }
+            
+            // 更新角度
+            const anglesContainer = document.getElementById('hexagon-angles');
+            anglesContainer.innerHTML = '';
+            for (const [key, value] of Object.entries(results.angles)) {
+                anglesContainer.innerHTML += `
+                    <div class="inline-result">
+                        <span class="inline-label">${key}：</span>
+                        <span class="inline-value">${value.toFixed(3)}°</span>
+                    </div>
+                `;
+            }
+            
+            // 更新线段表格
+            const segmentsTableContainer = document.getElementById('hexagon-segments-table');
+            let tableHTML = `
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>线段序号</th>
+                                <th>距离边 (mm)</th>
+                                <th>BC边长度 (mm)</th>
+                                <th>DE边长度 (mm)</th>
+                                <th>AF边长度 (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            for (let i = 0; i < results.segments.BC.length; i++) {
+                tableHTML += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${results.segments.BC[i].distance.toFixed(1)}</td>
+                        <td>${results.segments.BC[i].length.toFixed(3)}</td>
+                        <td>${results.segments.DE[i].length.toFixed(3)}</td>
+                        <td>${results.segments.AF[i].length.toFixed(3)}</td>
+                    </tr>
+                `;
+            }
+            
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            segmentsTableContainer.innerHTML = tableHTML;
+        }
+        
+        // 设置折叠功能
+        function setupCollapsibleSections() {
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const collapsible = this.nextElementSibling;
+                    const isExpanded = collapsible.style.display === 'block';
+                    
+                    if (isExpanded) {
+                        collapsible.style.display = 'none';
+                        this.classList.remove('expanded');
+                    } else {
+                        collapsible.style.display = 'block';
+                        this.classList.add('expanded');
+                    }
+                });
+            });
         }
         
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             // 默认计算一次圆
             calculateCircle();
+            
+            // 绑定六边形计算按钮事件
+            document.getElementById('calculate-hexagon-btn').addEventListener('click', calculateHexagon);
+            
+            // 初始化折叠功能
+            setupCollapsibleSections();
+            
+            // 自动计算一次六边形几何
+            calculateHexagon();
+            window.hexagonCalculated = true;
             
             // 添加触摸事件支持
             document.querySelectorAll('.tab, .mobile-tab, .btn-calculate').forEach(element => {
